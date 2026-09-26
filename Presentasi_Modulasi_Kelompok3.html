@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Modulasi, Pengkodean, dan Spektrum — Kelompok 3</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2f;--panel2:#10243e;--text:#f5f8ff;--muted:#a7b6cb;--cyan:#44d7ff;--blue:#5b86ff;--green:#5ff0b5;--yellow:#ffd166;--red:#ff6b7a;--purple:#b98cff;--line:rgba(255,255,255,.13);--shadow:0 24px 70px rgba(0,0,0,.36)}
+*{box-sizing:border-box} html,body{margin:0;height:100%;background:#02060c;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;overflow:hidden}
+body{background:radial-gradient(circle at 20% 10%,#0d3150 0,transparent 28%),radial-gradient(circle at 80% 85%,#142d5a 0,transparent 34%),#040a14}
+.deck{height:100%;width:100%;position:relative;perspective:1400px}
+.slide{position:absolute;inset:0;padding:52px 68px 54px;opacity:0;transform:translateX(8%) scale(.985);pointer-events:none;transition:opacity .65s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;background:linear-gradient(135deg,rgba(6,17,31,.96),rgba(9,29,52,.92));overflow:hidden}
+.slide::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-180px;top:-160px;background:radial-gradient(circle,rgba(68,215,255,.13),transparent 67%);filter:blur(2px)}
+.slide::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;left:-220px;bottom:-250px;background:radial-gradient(circle,rgba(91,134,255,.13),transparent 68%)}
+.slide.active{opacity:1;transform:translateX(0) scale(1);pointer-events:auto;z-index:2}.slide.before{transform:translateX(-8%) scale(.985)}
+.slide>*{position:relative;z-index:1}
+.topline{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.kicker{font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--cyan);font-weight:800}.slide-no{font-size:13px;color:#8295ad;font-weight:700}
+h1{font-size:clamp(36px,5vw,66px);line-height:1.02;margin:0 0 10px;letter-spacing:-.035em}h2{font-size:clamp(30px,3.4vw,50px);line-height:1.04;margin:0 0 14px;letter-spacing:-.025em}h3{margin:0 0 8px;font-size:22px}p{font-size:18px;line-height:1.55;color:var(--muted);margin:5px 0 12px}.lead{font-size:22px;max-width:1050px;color:#dce7f5}.small{font-size:14px}.tiny{font-size:12px}.strong{color:#fff;font-weight:800}.accent{color:var(--cyan)}.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.purple{color:var(--purple)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;min-height:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.grow{flex:1;min-height:0}.center{display:flex;align-items:center;justify-content:center}.vcenter{display:flex;flex-direction:column;justify-content:center}.card{background:linear-gradient(180deg,rgba(18,39,66,.9),rgba(8,22,39,.92));border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);backdrop-filter:blur(7px)}.card.soft{box-shadow:none;background:rgba(17,36,61,.63)}.card h3{font-size:21px}.card p,.card li{font-size:15px}.pill{display:inline-flex;border:1px solid rgba(68,215,255,.28);background:rgba(68,215,255,.08);color:#dff8ff;padding:7px 11px;border-radius:999px;font-weight:700;font-size:13px}.badge{display:inline-flex;min-width:36px;justify-content:center;border-radius:11px;padding:8px 10px;background:#122a47;border:1px solid var(--line);font-weight:800}
+ul.clean{list-style:none;padding:0;margin:10px 0}ul.clean li{margin:9px 0;padding-left:22px;position:relative;color:#c4d2e4}ul.clean li::before{content:"";position:absolute;left:3px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px rgba(68,215,255,.55)}
+.callout{padding:14px 18px;border-left:4px solid var(--cyan);background:rgba(68,215,255,.07);border-radius:12px;color:#d9eafa;font-size:16px}.warning{border-left-color:var(--yellow);background:rgba(255,209,102,.08)}
+.footer{position:absolute;left:68px;right:68px;bottom:20px;display:flex;justify-content:space-between;color:#6e8199;font-size:12px;z-index:5}.footer .brand{font-weight:800;color:#8ea5c1}
+.progress{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:10}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .4s ease}
+.controls{position:fixed;right:18px;bottom:20px;display:flex;gap:8px;z-index:11}.controls button,.quizbtn{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(7,18,32,.74);color:white;border-radius:13px;padding:10px 13px;font-weight:800;cursor:pointer;backdrop-filter:blur(8px);transition:.2s}.controls button:hover,.quizbtn:hover{transform:translateY(-2px);border-color:rgba(68,215,255,.7)}
+.counter{position:fixed;left:18px;bottom:19px;z-index:11;color:#8ca0b7;font-size:13px}
+.help{position:fixed;top:14px;right:18px;z-index:12;font-size:12px;color:#71849b}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}.active .reveal{opacity:1;transform:none}.active .reveal.d1{transition-delay:.12s}.active .reveal.d2{transition-delay:.24s}.active .reveal.d3{transition-delay:.36s}.active .reveal.d4{transition-delay:.48s}.active .reveal.d5{transition-delay:.6s}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;gap:26px;margin-top:26px}.node{position:relative;text-align:center;padding:22px 12px;border-radius:18px;background:rgba(15,35,59,.83);border:1px solid var(--line)}.node:not(:last-child)::after{content:"→";position:absolute;right:-23px;top:50%;transform:translateY(-50%);color:var(--cyan);font-size:28px}.pulse{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan);top:50%;left:12%;animation:pulseTravel 3.8s linear infinite}@keyframes pulseTravel{0%{left:12%}100%{left:87%}}
+canvas{width:100%;height:100%;display:block}.viz{min-height:220px;background:rgba(1,7,14,.58);border:1px solid var(--line);border-radius:18px;overflow:hidden;position:relative}.vizlabel{position:absolute;left:14px;top:12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#96a9bf;z-index:2}
+.tablewrap{overflow:hidden;border-radius:18px;border:1px solid var(--line);background:rgba(6,18,32,.66)}table{border-collapse:collapse;width:100%;font-size:14px}th{background:rgba(68,215,255,.1);color:#e8fbff;text-align:left;padding:11px 13px;border-bottom:1px solid var(--line)}td{padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.07);color:#b9c9dc}tr:last-child td{border-bottom:0}
+.constellation{height:340px;position:relative;background:radial-gradient(circle at center,rgba(68,215,255,.06),transparent 55%);border:1px solid var(--line);border-radius:20px;overflow:hidden}.axisx,.axisy{position:absolute;background:rgba(255,255,255,.15)}.axisx{left:8%;right:8%;top:50%;height:1px}.axisy{top:8%;bottom:8%;left:50%;width:1px}.dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 11px rgba(68,215,255,.9);transform:translate(-50%,-50%);transition:left .8s cubic-bezier(.2,.8,.2,1),top .8s cubic-bezier(.2,.8,.2,1),opacity .4s}.qam-meta{display:flex;gap:10px;align-items:center;margin-top:10px}.qam-meta .mode{font-size:28px;font-weight:900}.qam-meta .bits{color:var(--green);font-weight:800}
+.spectrum{height:130px;position:relative;margin-top:18px}.specbar{position:absolute;left:2%;right:2%;top:48px;height:30px;border-radius:999px;background:linear-gradient(90deg,#5ff0b5,#44d7ff,#5b86ff,#b98cff,#ff6b7a);opacity:.8}.specmark{position:absolute;top:30px;transform:translateX(-50%);text-align:center}.specmark::after{content:"";display:block;width:2px;height:55px;background:rgba(255,255,255,.55);margin:4px auto}.specmark b{font-size:13px}.specmark span{display:block;color:#8da1b7;font-size:11px}.scanner{position:absolute;top:35px;width:3px;height:55px;background:#fff;box-shadow:0 0 20px #fff;animation:scan 5s ease-in-out infinite}@keyframes scan{0%,100%{left:2%}50%{left:98%}}
+.ratebar{height:45px;display:flex;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:10px 0}.ratebar .info{background:linear-gradient(90deg,rgba(68,215,255,.42),rgba(91,134,255,.48));display:flex;align-items:center;justify-content:center;font-weight:800}.ratebar .redun{background:rgba(255,209,102,.17);display:flex;align-items:center;justify-content:center;color:#ffe29a;font-weight:800}
+.ofdm{height:320px;position:relative;border:1px solid var(--line);border-radius:20px;background:rgba(3,10,18,.6);overflow:hidden}.subcarrier{position:absolute;left:7%;right:7%;height:2px;transform-origin:left center;opacity:.85}.ofdm-note{position:absolute;bottom:12px;left:16px;color:#91a5bc;font-size:12px}
+.antennas{display:flex;gap:20px;align-items:center;justify-content:center;height:270px;position:relative}.antenna{width:8px;height:90px;border-radius:9px;background:linear-gradient(#d7e5f5,#5b86ff);box-shadow:0 0 12px rgba(91,134,255,.4)}.beam{position:absolute;left:50%;top:50%;width:360px;height:190px;transform:translate(0,-50%);border-radius:0 100% 100% 0;background:radial-gradient(ellipse at left center,rgba(68,215,255,.28),rgba(68,215,255,.08) 50%,transparent 72%);filter:drop-shadow(0 0 14px rgba(68,215,255,.2));animation:beamPulse 2s ease-in-out infinite}.device{position:absolute;right:9%;top:50%;transform:translateY(-50%);width:48px;height:76px;border-radius:10px;border:3px solid #cde7ff;background:#07121f}.device::after{content:"";position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--cyan)}@keyframes beamPulse{0%,100%{opacity:.58;transform:translate(0,-50%) scaleX(.96)}50%{opacity:1;transform:translate(0,-50%) scaleX(1.05)}}
+.hero-chain{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}.hero-chip{padding:16px 20px;border-radius:18px;background:rgba(17,39,67,.72);border:1px solid var(--line);font-weight:900;font-size:22px;position:relative;animation:float 4s ease-in-out infinite}.hero-chip:nth-child(2){animation-delay:.3s}.hero-chip:nth-child(3){animation-delay:.6s}.hero-chip:nth-child(4){animation-delay:.9s}.hero-chip:nth-child(5){animation-delay:1.2s}.arrow{color:var(--cyan);font-size:26px}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.names{display:grid;grid-template-columns:repeat(2,1fr);gap:11px 16px;margin-top:8px}.person{display:flex;justify-content:space-between;gap:14px;padding:12px 15px;border-radius:14px;background:rgba(15,33,56,.68);border:1px solid rgba(255,255,255,.08);font-size:14px}.person b{color:#fff}.person span{color:#8fa3bb}
+.quiz-answer{max-height:0;opacity:0;overflow:hidden;transition:max-height .55s ease,opacity .55s ease,margin .55s ease}.quiz-answer.show{max-height:170px;opacity:1;margin-top:12px}.stepflow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.step{padding:16px;border-radius:18px;background:rgba(17,37,63,.7);border:1px solid var(--line);text-align:center}.step .n{width:34px;height:34px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;background:rgba(68,215,255,.16);border:1px solid rgba(68,215,255,.35);font-weight:900;color:var(--cyan)}
+.formula{font-size:clamp(34px,4.5vw,58px);font-weight:900;letter-spacing:-.02em;padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,rgba(68,215,255,.09),rgba(91,134,255,.12));border:1px solid rgba(68,215,255,.2);display:inline-block}.calc{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.calc .box{padding:14px 17px;border-radius:14px;background:rgba(15,34,58,.8);border:1px solid var(--line);font-weight:800}.calc .eq{color:var(--cyan);font-size:24px;font-weight:900}
+.ref{padding:10px 14px;border-left:3px solid rgba(68,215,255,.45);background:rgba(15,31,53,.55);border-radius:9px;margin:8px 0;color:#bed0e3;font-size:14px;line-height:1.38}
+@media(max-width:900px){.slide{padding:30px 28px 42px}.footer{left:28px;right:28px}.grid4,.grid5{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.names{grid-template-columns:1fr}.pipeline,.stepflow{grid-template-columns:1fr 1fr}.node:not(:last-child)::after{display:none}.slide{overflow:auto}.controls{right:10px}.help{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{overflow:visible}.slide{position:relative;page-break-after:always;opacity:1;transform:none;height:100vh}.controls,.progress,.counter,.help{display:none}}
+
+
+/* FinalPlus controls */
+.overview{position:fixed;inset:0;background:rgba(2,6,12,.86);z-index:30;display:none;align-items:center;justify-content:center;padding:38px;backdrop-filter:blur(8px)}.overview.show{display:flex}.overview-panel{width:min(1080px,94vw);max-height:86vh;overflow:auto;background:#07111f;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:24px}.overview-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.ov-item{padding:13px 14px;border-radius:15px;border:1px solid rgba(255,255,255,.12);background:rgba(18,39,66,.75);cursor:pointer;color:#dce7f5;font-weight:800}.ov-item:hover{border-color:rgba(68,215,255,.7);transform:translateY(-1px)}.timer{position:fixed;left:94px;bottom:19px;z-index:11;color:#8ca0b7;font-size:13px}.paused::before{content:'ANIMASI PAUSE';position:fixed;top:14px;left:18px;z-index:40;color:#ffe29a;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.32);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900}.paused .wave,.paused canvas{filter:saturate(.55) opacity(.65)}
+</style></head><body>
+<div class="deck" id="deck">
+
+<section class="slide active" data-title="Pembuka">
+ <div class="topline"><div class="kicker">Kelompok 3 · Jaringan Nirkabel</div><div class="slide-no">01</div></div>
+ <div class="grow vcenter">
+  <div class="pill reveal">Presentasi interaktif HTML</div>
+  <h1 class="reveal d1">Modulasi, Pengkodean,<br><span class="accent">dan Spektrum</span></h1>
+  <p class="lead reveal d2">Dari bit digital → sinyal radio → sampai ke perangkat tujuan.</p>
+  <div class="hero-chain reveal d3"><div class="hero-chip">Bit</div><div class="arrow">→</div><div class="hero-chip">Coding</div><div class="arrow">→</div><div class="hero-chip">Modulasi</div><div class="arrow">→</div><div class="hero-chip">Spektrum</div><div class="arrow">→</div><div class="hero-chip">Receiver</div></div>
+  <p class="small reveal d4">Revisi visual + materi OFDM, MIMO, coding rate, dan referensi.</p>
+ </div>
+</section>
+
+<section class="slide" data-title="Anggota Kelompok">
+ <div class="topline"><div class="kicker">Anggota Kelompok 3</div><div class="slide-no">02</div></div>
+ <h2>Daftar anggota dan NIM</h2>
+ <div class="names grow">
+  <div class="person reveal"><b>ABDUL KHOLIK</b><span>231011400097</span></div>
+  <div class="person reveal d1"><b>AHMAD REZA</b><span>231011403385</span></div>
+  <div class="person reveal d1"><b>AMRI HAMZAH</b><span>231011400058</span></div>
+  <div class="person reveal d2"><b>FIYADO YUDHA WITAMA</b><span>231011400095</span></div>
+  <div class="person reveal d2"><b>MUHAMMAD MABI PALAKA</b><span>231011401691</span></div>
+  <div class="person reveal d3"><b>MUHAMMAD RIYAD FIRDAUS</b><span>231011400081</span></div>
+  <div class="person reveal d3"><b>NABIL GILANG RAMADHAN</b><span>231011401437</span></div>
+ </div>
+ <div class="callout reveal d4">Semua anggota: <b>Kelompok 3</b>.</div>
+</section>
+
+<section class="slide" data-title="Tujuan">
+ <div class="topline"><div class="kicker">Kenapa materi ini penting?</div><div class="slide-no">03</div></div>
+ <h2>Setiap jaringan nirkabel harus memilih <span class="accent">cara membawa bit</span>.</h2>
+ <p class="lead">Wi‑Fi, 4G/5G, Bluetooth, dan IoT sama-sama harus “membungkus” bit menjadi gelombang radio.</p>
+ <div class="grid3 grow">
+  <div class="card reveal"><h3>Tujuan pembelajaran</h3><ul class="clean"><li>Memahami modulasi & pengkodean</li><li>Membedakan analog & digital</li><li>Menjelaskan channel coding</li><li>Mengaitkan spektrum dan performa</li></ul></div>
+  <div class="card reveal d1"><h3>Contoh nyata</h3><ul class="clean"><li>Dekat router → modulasi tinggi</li><li>Jauh/terhalang → modulasi diturunkan</li><li>2.4 GHz luas, tetapi lebih ramai interferensi</li></ul></div>
+  <div class="card reveal d2"><h3>Inti bahasan</h3><ul class="clean"><li><b>Modulasi</b> → bentuk gelombang</li><li><b>Coding</b> → ketahanan error</li><li><b>Spektrum</b> → jalur frekuensi</li></ul></div>
+ </div>
+</section>
+
+<section class="slide" data-title="Konsep Modulasi">
+ <div class="topline"><div class="kicker">Konsep dasar modulasi</div><div class="slide-no">04</div></div>
+ <h2>Modulasi = informasi menumpang pada <span class="accent">carrier</span>.</h2>
+ <p class="lead">Carrier adalah “kendaraan”, data adalah “penumpang”. Modulasi menentukan cara penumpang dibawa agar sampai tujuan.</p>
+ <div class="pipeline reveal d1" style="position:relative">
+  <div class="pulse"></div><div class="node"><b>Data digital</b><p>101101</p></div><div class="node"><b>Modulator</b><p>ubah carrier</p></div><div class="node"><b>Kanal udara</b><p>noise + fading</p></div><div class="node"><b>Demodulator</b><p>ambil data</p></div><div class="node"><b>Data asli</b><p>101101</p></div>
+ </div>
+ <div class="grid3 reveal d2" style="margin-top:20px"><div class="card soft"><h3>Amplitude</h3><p>Kekuatan gelombang berubah.<br><b>ASK / AM</b></p></div><div class="card soft"><h3>Frekuensi</h3><p>Kecepatan osilasi berubah.<br><b>FSK / FM</b></p></div><div class="card soft"><h3>Fase</h3><p>Sudut gelombang berubah.<br><b>PSK / QAM</b></p></div></div>
+</section>
+
+<section class="slide" data-title="AM FM PM">
+ <div class="topline"><div class="kicker">Modulasi analog</div><div class="slide-no">05</div></div><h2>AM, FM, dan PM — <span class="accent">lihat bentuk gelombangnya</span></h2>
+ <div class="grid3 grow">
+  <div class="card reveal"><h3>AM · Amplitude</h3><div class="viz"><div class="vizlabel">amplitudo berubah</div><canvas class="wave" data-mode="am"></canvas></div><p>Parameter: amplitudo · mudah dibuat · rentan noise.</p></div>
+  <div class="card reveal d1"><h3>FM · Frequency</h3><div class="viz"><div class="vizlabel">kerapatan berubah</div><canvas class="wave" data-mode="fm"></canvas></div><p>Parameter: frekuensi · lebih tahan noise · contoh: radio FM.</p></div>
+  <div class="card reveal d2"><h3>PM · Phase</h3><div class="viz"><div class="vizlabel">posisi/fase berubah</div><canvas class="wave" data-mode="pm"></canvas></div><p>Parameter: fase · dasar sistem digital · berkaitan dengan FM.</p></div>
+ </div><div class="callout reveal d3">Pada AM, noise amplitudo langsung mengganggu pesan; FM relatif lebih aman karena pesan dibawa oleh perubahan frekuensi.</div>
+</section>
+
+<section class="slide" data-title="ASK FSK PSK">
+ <div class="topline"><div class="kicker">Modulasi digital</div><div class="slide-no">06</div></div><h2>ASK, FSK, PSK: bit 0 dan 1 menjadi <span class="accent">kondisi sinyal berbeda</span>.</h2>
+ <div class="grid3 grow"><div class="card reveal"><h3>ASK</h3><div class="viz"><div class="vizlabel">10110010</div><canvas class="wave" data-mode="ask"></canvas></div><p>1 = amplitudo tinggi · 0 = amplitudo rendah.</p></div><div class="card reveal d1"><h3>FSK</h3><div class="viz"><div class="vizlabel">10110010</div><canvas class="wave" data-mode="fsk"></canvas></div><p>1 = frekuensi f1 · 0 = frekuensi f0.</p></div><div class="card reveal d2"><h3>PSK</h3><div class="viz"><div class="vizlabel">10110010</div><canvas class="wave" data-mode="psk"></canvas></div><p>Bit diwakili fase · BPSK: 2 fase · QPSK: 4 fase.</p></div></div>
+ <div class="callout reveal d3">Analogi: ASK = terang/redup, FSK = kedipan cepat/lambat, PSK = menggeser arah kedipan.</div>
+</section>
+
+<section class="slide" data-title="Perbandingan Modulasi">
+ <div class="topline"><div class="kicker">Ringkasan modulasi</div><div class="slide-no">07</div></div><h2>Perbandingan singkat</h2>
+ <div class="tablewrap grow reveal"><table><thead><tr><th>Teknik</th><th>Parameter berubah</th><th>Ketahanan noise</th><th>Efisiensi</th><th>Contoh penggunaan</th></tr></thead><tbody>
+ <tr><td><b>AM</b></td><td>Amplitudo</td><td>Rendah</td><td>Rendah</td><td>Radio AM</td></tr><tr><td><b>FM</b></td><td>Frekuensi</td><td>Lebih baik</td><td>Sedang</td><td>Radio FM</td></tr><tr><td><b>ASK</b></td><td>Amplitudo digital</td><td>Rendah</td><td>Sederhana</td><td>RFID/remote sederhana</td></tr><tr><td><b>FSK</b></td><td>Frekuensi digital</td><td>Baik</td><td>Sedang</td><td>GFSK pada mode Bluetooth tertentu, modem</td></tr><tr><td><b>PSK</b></td><td>Fase digital</td><td>Baik</td><td>Tinggi</td><td>Wi‑Fi, seluler</td></tr><tr><td><b>QAM</b></td><td>Amplitudo + fase</td><td>Butuh SNR baik</td><td>Sangat tinggi</td><td>Wi‑Fi, 4G/5G</td></tr>
+ </tbody></table></div><div class="callout reveal d1">Semakin banyak parameter yang dipakai membawa informasi, efisiensi cenderung naik — tetapi kebutuhan kualitas sinyal juga naik.</div>
+</section>
+
+<section class="slide" data-title="QAM">
+ <div class="topline"><div class="kicker">QAM</div><div class="slide-no">08</div></div><h2>QPSK → 16‑QAM → 64‑QAM → 256‑QAM</h2><p class="lead">Titik konstelasi bertambah, bit/simbol naik, tetapi jarak antartitik makin rapat.</p>
+ <div class="grid2 grow"><div class="constellation reveal" id="constellation"><div class="axisx"></div><div class="axisy"></div></div><div class="vcenter reveal d1"><div class="qam-meta"><div class="mode" id="qamMode">QPSK</div><div class="bits" id="qamBits">2 bit/simbol</div></div><p id="qamText">4 titik konstelasi. Jarak titik relatif jauh sehingga lebih toleran terhadap noise.</p><div class="card soft"><h3>Trade‑off</h3><p><b>256‑QAM</b> lebih cepat, tetapi membutuhkan sinyal lebih bersih karena titik konstelasi sangat rapat.</p></div><div class="grid4" style="margin-top:12px"><span class="badge">2 bit</span><span class="badge">4 bit</span><span class="badge">6 bit</span><span class="badge">8 bit</span></div><div class="callout warning" style="margin-top:12px;font-size:14px">Contoh ideal: <b>1 Msymbol/s × 2 bit/simbol = 2 Mbps</b> (QPSK), sedangkan <b>× 8 bit/simbol = 8 Mbps</b> (256‑QAM). Belum termasuk coding/overhead.</div></div></div>
+</section>
+
+<section class="slide" data-title="AMC">
+ <div class="topline"><div class="kicker">Adaptive Modulation and Coding</div><div class="slide-no">09</div></div><h2>AMC: kondisi kanal berubah → <span class="accent">modulasi & coding ikut berubah</span>.</h2>
+ <div class="grid3 grow"><div class="card reveal"><span class="pill">Dekat · SNR tinggi</span><h3 style="margin-top:14px">256‑QAM + rate tinggi</h3><p>Kecepatan maksimal.</p><div class="ratebar"><div class="info" style="width:75%">DATA</div><div class="redun" style="width:25%">FEC</div></div></div><div class="card reveal d1"><span class="pill">Sedang</span><h3 style="margin-top:14px">16/64‑QAM</h3><p>Proteksi sedang, seimbang.</p><div class="ratebar"><div class="info" style="width:66.6%">DATA</div><div class="redun" style="width:33.4%">FEC</div></div></div><div class="card reveal d2"><span class="pill">Jauh · SNR rendah</span><h3 style="margin-top:14px">QPSK/BPSK + proteksi kuat</h3><p>Prioritas: tetap tersambung.</p><div class="ratebar"><div class="info" style="width:50%">DATA</div><div class="redun" style="width:50%">FEC</div></div></div></div>
+ <div class="grid2 reveal d3" style="margin-top:14px"><div class="callout">SNR tinggi → <b>256‑QAM</b> → <b>rate 3/4</b> → throughput tinggi</div><div class="callout warning">SNR rendah → <b>QPSK/BPSK</b> → <b>rate 1/2</b> → koneksi stabil</div></div><div class="callout reveal d4" style="margin-top:12px">AMC = keputusan otomatis berdasarkan kondisi kanal, bukan satu modulasi tetap untuk semua pengguna.</div>
+</section>
+
+<section class="slide" data-title="Konsep Coding">
+ <div class="topline"><div class="kicker">Konsep pengkodean</div><div class="slide-no">10</div></div><h2>Coding menambah <span class="accent">“pengaman” data</span>.</h2><p class="lead">Bit redundan membantu penerima mendeteksi atau memperbaiki error.</p>
+ <div class="grid2 grow"><div class="card reveal"><h3>Contoh parity bit</h3><div style="display:flex;gap:8px;margin:18px 0"><span class="badge">1</span><span class="badge">0</span><span class="badge">1</span><span class="badge">1</span></div><p>Jumlah 1 = 3 (ganjil) → tambah parity <b>1</b> agar total genap.</p><div style="display:flex;gap:8px"><span class="badge">1</span><span class="badge">0</span><span class="badge">1</span><span class="badge">1</span><span class="badge" style="border-color:rgba(95,240,181,.7);color:var(--green)">1</span></div></div><div class="grid2 reveal d1"><div class="card soft"><h3>Tanpa coding</h3><p>Bit salah langsung merusak data.</p></div><div class="card soft"><h3>Dengan coding</h3><p>Sebagian error dapat dideteksi atau dikoreksi.</p></div><div class="card soft" style="grid-column:1/-1"><h3>Kenapa perlu?</h3><p>Kanal udara punya noise, interferensi, dan fading.</p></div></div></div><div class="callout reveal d2">Parity hanya contoh dasar. Sistem modern memakai LDPC, Turbo, dan Polar Code.</div>
+</section>
+
+<section class="slide" data-title="Coding Rate">
+ <div class="topline"><div class="kicker">Coding Rate</div><div class="slide-no">11</div></div><h2>Rate 1/2, 2/3, 3/4: <span class="accent">proteksi vs efisiensi</span>.</h2><p class="lead">Coding rate = bit informasi / total bit yang dikirim.</p>
+ <div class="grid3 grow"><div class="card reveal"><h3>Rate 1/2</h3><div class="ratebar"><div class="info" style="width:50%">INFORMASI</div><div class="redun" style="width:50%">REDUNDAN</div></div><p>1 bit info → ±2 bit terkirim.<br><b>Proteksi kuat</b>, overhead besar.</p></div><div class="card reveal d1"><h3>Rate 2/3</h3><div class="ratebar"><div class="info" style="width:66.7%">INFORMASI</div><div class="redun" style="width:33.3%">REDUNDAN</div></div><p>2 bit info → ±3 bit terkirim.<br>Proteksi dan efisiensi sedang.</p></div><div class="card reveal d2"><h3>Rate 3/4</h3><div class="ratebar"><div class="info" style="width:75%">INFORMASI</div><div class="redun" style="width:25%">REDUNDAN</div></div><p>3 bit info → ±4 bit terkirim.<br>Proteksi lebih sedikit, data lebih efisien.</p></div></div><div class="callout reveal d3">Dalam AMC: sinyal lemah → rate lebih rendah; sinyal kuat → rate lebih tinggi agar throughput naik.</div>
+</section>
+
+<section class="slide" data-title="Jenis Channel Coding">
+ <div class="topline"><div class="kicker">Jenis channel coding</div><div class="slide-no">12</div></div><h2>Detection dan correction sering <span class="accent">dipakai bersama</span>.</h2>
+ <div class="grid2 grow"><div class="card reveal"><h3>Error Detection</h3><ul class="clean"><li>Mendeteksi bahwa data rusak</li><li>CRC, parity bit</li><li>Validasi frame/paket</li><li>Jika error, paket dapat diminta ulang</li></ul></div><div class="card reveal d1"><h3>Error Correction</h3><ul class="clean"><li>Memperbaiki error otomatis</li><li>Reed‑Solomon, convolutional, Turbo, LDPC, Polar</li><li>Penting saat retransmisi mahal/lambat</li></ul></div></div>
+ <div class="pipeline reveal d2" style="grid-template-columns:repeat(5,1fr);margin-bottom:24px"><div class="node">Data</div><div class="node">Coder</div><div class="node">Kanal</div><div class="node">Decoder</div><div class="node">Data</div></div>
+ <div class="callout reveal d3">Dalam jaringan nyata: koreksi dilakukan, lalu hasilnya dapat divalidasi dengan CRC.</div>
+</section>
+
+<section class="slide" data-title="Kode Modern">
+ <div class="topline"><div class="kicker">Kode modern</div><div class="slide-no">13</div></div><h2>Setiap generasi memilih coding sesuai <span class="accent">kebutuhan performa</span>.</h2>
+ <div class="grid5 grow"><div class="card reveal"><h3>GSM / Wi‑Fi awal</h3><p><b>Convolutional</b><br>Mudah di-decode.</p></div><div class="card reveal d1"><h3>CD / QR / Satelit</h3><p><b>Reed‑Solomon</b><br>Kuat terhadap burst error.</p></div><div class="card reveal d2"><h3>3G / 4G LTE</h3><p><b>Turbo</b><br>Mendekati batas Shannon.</p></div><div class="card reveal d3"><h3>Wi‑Fi / 5G data</h3><p><b>LDPC</b><br>Efisien untuk throughput tinggi.</p></div><div class="card reveal d4"><h3>5G control</h3><p><b>Polar</b><br>Efektif untuk channel kontrol.</p></div></div><div class="callout reveal d5">Coding bukan “tambahan kecil”; ia menentukan apakah data tetap terbaca saat sinyal mengalami gangguan.</div>
+</section>
+
+<section class="slide" data-title="Spektrum">
+ <div class="topline"><div class="kicker">Spektrum frekuensi</div><div class="slide-no">14</div></div><h2>Spektrum = sumber daya <span class="accent">terbatas</span>.</h2><p class="lead">Semakin tinggi frekuensi, kapasitas bisa meningkat — tetapi jangkauan umumnya makin pendek.</p>
+ <div class="spectrum reveal"><div class="specbar"></div><div class="scanner"></div><div class="specmark" style="left:12%"><b>700–900</b><span>MHz · coverage</span></div><div class="specmark" style="left:37%"><b>1800–2600</b><span>MHz · kapasitas</span></div><div class="specmark" style="left:65%"><b>3.5</b><span>GHz · mid-band</span></div><div class="specmark" style="left:90%"><b>26/28</b><span>GHz · mmWave</span></div></div>
+ <div class="grid2 reveal d1"><div class="card soft"><h3>Licensed spectrum</h3><p>Dipakai operator seluler melalui izin/regulasi.</p></div><div class="card soft"><h3>Unlicensed spectrum</h3><p>Dapat dipakai dengan batasan daya. Contoh: 2.4 GHz & 5 GHz untuk Wi‑Fi/Bluetooth.</p></div></div><div class="callout reveal d2">Analogi jalan raya: pita rendah = jangkauan jauh; pita tinggi = kapasitas tinggi tetapi cakupan lebih pendek.</div>
+</section>
+
+<section class="slide" data-title="Pita Seluler">
+ <div class="topline"><div class="kicker">Contoh pita seluler</div><div class="slide-no">15</div></div><h2>Contoh lapisan spektrum jaringan seluler</h2><p class="lead">Status penggunaan/penetapan setiap pita dapat berbeda dan berubah mengikuti regulasi.</p>
+ <div class="spectrum reveal" style="height:155px"><div class="specbar"></div><div class="scanner"></div><div class="specmark" style="left:8%"><b>700</b><span>MHz</span></div><div class="specmark" style="left:18%"><b>850/900</b><span>MHz</span></div><div class="specmark" style="left:32%"><b>1800</b><span>MHz</span></div><div class="specmark" style="left:45%"><b>2.1</b><span>GHz</span></div><div class="specmark" style="left:58%"><b>2.3/2.6</b><span>GHz</span></div><div class="specmark" style="left:73%"><b>3.5</b><span>GHz</span></div><div class="specmark" style="left:92%"><b>26/28</b><span>GHz</span></div></div>
+ <div class="grid3 grow"><div class="card reveal d1"><h3>Pita rendah</h3><p>700–900 MHz: coverage luas dan penetrasi bangunan.</p></div><div class="card reveal d2"><h3>Pita menengah</h3><p>1800 MHz–3.5 GHz: keseimbangan cakupan dan kapasitas.</p></div><div class="card reveal d3"><h3>Pita tinggi</h3><p>26/28 GHz: kapasitas sangat tinggi, jangkauan pendek.</p></div></div>
+ <div class="callout warning reveal d4">Konteks deck: Komdigi mengumumkan hasil seleksi 700 MHz dan 2,6 GHz pada 2026; pita lain tetap harus dibaca sesuai izin/operator dan perkembangan kebijakan.<br><span class="tiny">Sumber ringkas: Komdigi, siaran pers/hasil seleksi spektrum 2026.</span></div>
+</section>
+
+<section class="slide" data-title="Wi-Fi Spectrum">
+ <div class="topline"><div class="kicker">Spektrum Wi‑Fi</div><div class="slide-no">16</div></div><h2>2.4 GHz vs 5 GHz vs 6 GHz</h2>
+ <div class="grid3 grow"><div class="card reveal"><h3>2.4 GHz</h3><ul class="clean"><li>Jangkauan lebih luas</li><li>Penetrasi tembok baik</li><li>20/40 MHz</li><li>Sering padat/interferensi</li></ul></div><div class="card reveal d1"><h3>5 GHz</h3><ul class="clean"><li>Interferensi lebih rendah</li><li>20/40/80/160 MHz</li><li>Kecepatan lebih tinggi</li><li>Jangkauan lebih pendek</li></ul></div><div class="card reveal d2"><h3>6 GHz</h3><ul class="clean"><li>Wi‑Fi 6E/7</li><li>Channel hingga 320 MHz</li><li>Kepadatan relatif rendah</li><li>Butuh perangkat kompatibel</li></ul></div></div><div class="callout reveal d3">Rumah besar/banyak tembok → 2.4 GHz bisa lebih stabil. Streaming dekat router → 5/6 GHz bisa memberi throughput lebih tinggi.</div>
+</section>
+
+<section class="slide" data-title="Standar Jaringan">
+ <div class="topline"><div class="kicker">Aplikasi pada standar jaringan</div><div class="slide-no">17</div></div><h2>Modulasi + coding + AMC bekerja sebagai <span class="accent">satu sistem</span>.</h2>
+ <div class="tablewrap grow reveal"><table><thead><tr><th>Standar</th><th>Modulasi</th><th>Coding</th><th>Contoh situasi</th></tr></thead><tbody><tr><td><b>Wi‑Fi</b></td><td>OFDM/OFDMA; subcarrier BPSK/QPSK/QAM</td><td>Convolutional, LDPC</td><td>Laptop ↔ router</td></tr><tr><td><b>4G LTE</b></td><td>QPSK, 16‑QAM, 64‑QAM</td><td>Turbo Code</td><td>Streaming video seluler</td></tr><tr><td><b>5G NR</b></td><td>QPSK, 16/64/256‑QAM</td><td>LDPC + Polar</td><td>URLLC / eMBB / IoT</td></tr></tbody></table></div>
+ <div class="hero-chain reveal d1" style="justify-content:center"><div class="hero-chip">Wi‑Fi / 4G / 5G</div><div class="arrow">→</div><div class="hero-chip">AMC</div><div class="arrow">→</div><div class="hero-chip">QAM</div><div class="arrow">→</div><div class="hero-chip">LDPC / Polar</div></div><div class="callout warning reveal d2" style="margin-top:14px">Catatan akademik: <b>OFDM</b> adalah teknik multicarrier; modulasi digital terjadi pada masing‑masing subcarrier.</div>
+ <div class="callout reveal d2">Pola umum: standar baru mengejar throughput, latensi rendah, dan efisiensi spektrum dengan modulasi lebih tinggi + coding lebih kuat.</div>
+</section>
+
+<section class="slide" data-title="Shannon">
+ <div class="topline"><div class="kicker">Kapasitas Shannon</div><div class="slide-no">18</div></div><h2>Bandwidth dan SNR membatasi <span class="accent">kapasitas teoritis kanal</span>.</h2>
+ <div class="grid2 grow"><div class="vcenter reveal"><div class="formula">C = B × log₂(1 + SNR)</div><p><b>C</b> = kapasitas (bps) · <b>B</b> = bandwidth (Hz) · <b>SNR</b> harus dalam bentuk <b>linear</b>.</p></div><div class="card reveal d1"><h3>Contoh hitung cepat</h3><div class="calc"><div class="box">B = 20 MHz</div><div class="eq">+</div><div class="box">SNR = 10 dB</div></div><div class="calc" style="margin-top:12px"><div class="box">10 dB → 10^(10/10) = 10</div></div><div class="calc" style="margin-top:12px"><div class="box">C ≈ 20M × log₂(11)</div><div class="eq">≈</div><div class="box green">69 Mbps</div></div></div></div>
+ <div class="callout warning reveal d2">Makna akademik: nilai dB tidak langsung dimasukkan ke rumus. Konversi dulu ke rasio linear.</div>
+ <div class="callout reveal d3">SNR tinggi memungkinkan titik QAM lebih rapat → orde modulasi lebih tinggi.</div>
+</section>
+
+<section class="slide" data-title="OFDM">
+ <div class="topline"><div class="kicker">OFDM</div><div class="slide-no">19</div></div><h2>Banyak subcarrier sempit di dalam <span class="accent">satu kanal besar</span>.</h2><p class="lead">OFDM membagi kanal lebar menjadi banyak subcarrier ortogonal sehingga sistem lebih tahan terhadap multipath.</p>
+ <div class="grid2 grow"><div class="ofdm reveal" id="ofdmViz"><canvas id="ofdmCanvas"></canvas><div class="ofdm-note">Subcarrier bergerak dengan frekuensi berbeda, tetapi tersusun ortogonal.</div></div><div class="vcenter reveal d1"><div class="card soft"><h3>Kenapa berguna?</h3><p>Multipath membuat simbol saling mengganggu. Guard interval / cyclic prefix membantu menekan efeknya.</p></div><div class="grid2" style="margin-top:12px"><div class="card soft"><h3>Tanpa OFDM</h3><p>Satu carrier lebar lebih rentan fading selektif.</p></div><div class="card soft"><h3>Dengan OFDM</h3><p>Data dibagi ke banyak subcarrier.</p></div></div><div class="callout warning" style="margin-top:12px">Trade‑off: perlu sinkronisasi dan kontrol PAPR yang baik.</div></div></div>
+</section>
+
+<section class="slide" data-title="MIMO Beamforming">
+ <div class="topline"><div class="kicker">MIMO & Beamforming</div><div class="slide-no">20</div></div><h2>Banyak antena → <span class="accent">throughput, reliabilitas, dan arah sinyal</span>.</h2>
+ <div class="grid2 grow"><div class="card reveal"><div class="antennas"><div class="antenna"></div><div class="antenna"></div><div class="antenna"></div><div class="antenna"></div><div class="beam"></div><div class="device"></div></div><p class="center">Fase/amplitudo antar antena diatur agar sinyal menguat ke perangkat tujuan.</p></div><div class="vcenter reveal d1"><div class="card soft"><h3>Spatial multiplexing</h3><p>Beberapa aliran data dikirim paralel → throughput naik.</p></div><div class="card soft" style="margin-top:12px"><h3>Diversity</h3><p>Beberapa antena membantu menjaga koneksi saat fading.</p></div><div class="card soft" style="margin-top:12px"><h3>Beamforming</h3><p>Mengarahkan energi sinyal ke arah tertentu.</p></div></div></div><div class="callout reveal d2">Contoh kampus ramai: AP dapat mengarahkan sinyal ke perangkat aktif dan mengurangi energi ke arah lain.</div>
+</section>
+
+<section class="slide" data-title="End-to-End & Quiz">
+ <div class="topline"><div class="kicker">Alur end‑to‑end + studi kasus</div><div class="slide-no">21</div></div><h2>Dari “Halo” sampai ke receiver</h2>
+ <div class="stepflow reveal"><div class="step"><div class="n">1</div><b>Pesan</b><p>“Halo” → bit digital</p></div><div class="step"><div class="n">2</div><b>Coding</b><p>Tambah bit pengaman</p></div><div class="step"><div class="n">3</div><b>Modulasi</b><p>Bit → simbol QAM</p></div><div class="step"><div class="n">4</div><b>Spektrum</b><p>Dipancarkan di pita radio</p></div><div class="step"><div class="n">5</div><b>Receiver</b><p>Demodulasi + decoding</p></div></div>
+ <div class="card reveal d1" style="margin-top:18px"><h3>Quiz singkat</h3><p>Laptop dekat router memakai <b>256‑QAM rate 3/4</b>. Ketika pindah jauh dan SNR turun, apa yang sebaiknya dilakukan sistem?</p><button class="quizbtn" id="quizBtn">Tampilkan jawaban</button><div class="quiz-answer" id="quizAnswer"><div class="callout" style="margin-top:10px">AMC menurunkan orde modulasi — misalnya ke 64‑QAM, 16‑QAM, atau QPSK — dan memakai coding rate lebih rendah agar koneksi tetap stabil.</div><div class="grid2" style="margin-top:10px"><div class="callout warning">SNR 10 dB masuk rumus Shannon sebagai <b>10 linear</b>, bukan 10 dB.</div><div class="callout warning">Untuk error berat, <b>rate 1/2</b> lebih kuat daripada rate 3/4.</div></div></div></div>
+</section>
+
+<section class="slide" data-title="Kesimpulan">
+ <div class="topline"><div class="kicker">Kesimpulan</div><div class="slide-no">22</div></div><h2>Tiga ide utama + dua penguat</h2>
+ <div class="grid5 grow"><div class="card reveal"><h3>1. Modulasi</h3><p>Mengubah bit menjadi gelombang radio.</p></div><div class="card reveal d1"><h3>2. Coding</h3><p>Menambah proteksi terhadap error.</p></div><div class="card reveal d2"><h3>3. Spektrum</h3><p>Menentukan jalur frekuensi yang tersedia.</p></div><div class="card reveal d3"><h3>4. MIMO</h3><p>Memakai banyak antena untuk kapasitas/reliabilitas.</p></div><div class="card reveal d4"><h3>5. Beamforming</h3><p>Mengarahkan energi sinyal.</p></div></div>
+ <div class="callout reveal d5">Pesan utama: performa jaringan nirkabel adalah keseimbangan antara <b>bandwidth, SNR, modulasi, coding, MIMO/beamforming, dan manajemen spektrum.</b></div>
+</section>
+
+<section class="slide" data-title="Referensi">
+ <div class="topline"><div class="kicker">Referensi</div><div class="slide-no">23</div></div><h2>Referensi utama</h2>
+ <div class="grow reveal"><div class="ref">Claude E. Shannon, “A Mathematical Theory of Communication,” <i>Bell System Technical Journal</i>, 1948.</div><div class="ref">IEEE Standards Association — IEEE Std 802.11: Wireless LAN Medium Access Control (MAC) and Physical Layer (PHY) Specifications.</div><div class="ref">3GPP TS 38.211 — NR; Physical channels and modulation.</div><div class="ref">3GPP TS 38.212 — NR; Multiplexing and channel coding.</div><div class="ref">Kementerian Komunikasi dan Digital (Komdigi), siaran pers hasil seleksi pita 700 MHz dan 2,6 GHz untuk jaringan bergerak seluler, 2026.</div><div class="ref">John G. Proakis & Masoud Salehi, <i>Digital Communications</i>, McGraw‑Hill.</div><div class="ref">Materi kuliah: modulasi digital, channel coding, spektrum frekuensi, dan jaringan nirkabel.</div></div>
+ <div class="callout warning reveal d1">Gunakan referensi standar resmi untuk angka teknis detail; kebijakan spektrum dapat berubah mengikuti regulasi terbaru.</div>
+</section>
+
+</div>
+<div class="help">← → / Space · F fullscreen · P autoplay · O overview · A pause animasi</div>
+<div class="counter" id="counter">1 / 23</div><div class="timer" id="timer">00:00</div>
+<div class="controls"><button id="overviewBtn" aria-label="Overview">☷</button><button id="pauseAnim" aria-label="Pause animasi">A</button><button id="prev" aria-label="Slide sebelumnya">←</button><button id="next" aria-label="Slide berikutnya">→</button><button id="fs" aria-label="Fullscreen">⛶</button></div><div class="overview" id="overview"><div class="overview-panel"><div class="overview-head"><h3 style="margin:0">Menu Slide</h3><button class="quizbtn" id="closeOverview">Tutup</button></div><div class="overview-grid" id="overviewGrid"></div></div></div>
+<div class="progress"><div id="bar"></div></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let idx=0,auto=null,startX=0,paused=false,t0=Date.now();
+function show(n){idx=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===idx);s.classList.toggle('before',i<idx)});document.getElementById('counter').textContent=`${idx+1} / ${slides.length}`;document.getElementById('bar').style.width=`${((idx+1)/slides.length)*100}%`;location.hash=`slide-${idx+1}`;if(idx===7) initQam();}
+function next(){show(idx+1)} function prev(){show(idx-1)}
+document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;document.getElementById('fs').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+const ov=document.getElementById('overview'),ovGrid=document.getElementById('overviewGrid');slides.forEach((s,i)=>{const b=document.createElement('button');b.className='ov-item';b.textContent=`${String(i+1).padStart(2,'0')} · ${s.dataset.title||'Slide'}`;b.onclick=()=>{ov.classList.remove('show');show(i)};ovGrid.appendChild(b)});document.getElementById('overviewBtn').onclick=()=>ov.classList.add('show');document.getElementById('closeOverview').onclick=()=>ov.classList.remove('show');ov.onclick=e=>{if(e.target===ov)ov.classList.remove('show')};document.getElementById('pauseAnim').onclick=()=>{paused=!paused;document.body.classList.toggle('paused',paused)};
+document.addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();next()} if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()} if(e.key.toLowerCase()==='f')document.getElementById('fs').click(); if(e.key.toLowerCase()==='p'){if(auto){clearInterval(auto);auto=null}else auto=setInterval(()=>idx<slides.length-1?next():show(0),7000)} if(e.key.toLowerCase()==='o')document.getElementById('overviewBtn').click(); if(e.key.toLowerCase()==='a')document.getElementById('pauseAnim').click(); if(e.key==='Escape')ov.classList.remove('show')});
+document.addEventListener('touchstart',e=>startX=e.touches[0].clientX,{passive:true});document.addEventListener('touchend',e=>{let d=e.changedTouches[0].clientX-startX;if(Math.abs(d)>60)d<0?next():prev()},{passive:true});
+const hash=location.hash.match(/slide-(\d+)/);if(hash)show(+hash[1]-1);
+
+function fitCanvas(c){const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=Math.max(1,r.width*d);c.height=Math.max(1,r.height*d);const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return [x,r.width,r.height]}
+function drawWave(c,t){let [x,w,h]=fitCanvas(c),mode=c.dataset.mode;x.clearRect(0,0,w,h);x.strokeStyle='rgba(255,255,255,.08)';x.lineWidth=1;for(let yy=0;yy<h;yy+=h/4){x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke()}x.strokeStyle='#44d7ff';x.lineWidth=2.2;x.beginPath();const bits='10110010';for(let px=0;px<w;px++){let u=px/w,tt=u*12*Math.PI+t*.002, y=0;if(mode==='am'){let env=.38+.28*Math.sin(u*2*Math.PI+t*.001);y=Math.sin(tt)*env}else if(mode==='fm'){let phase=u*8*Math.PI+2.2*Math.sin(u*2*Math.PI+t*.001);y=Math.sin(phase*2)}else if(mode==='pm'){let phase=(u<.5?0:Math.PI*.9)+.35*Math.sin(t*.001);y=Math.sin(u*12*Math.PI+phase)}else{let bi=Math.min(bits.length-1,Math.floor(u*bits.length)),b=bits[bi]==='1'?1:0;if(mode==='ask')y=Math.sin(tt)*(b?.72:.22);if(mode==='fsk')y=Math.sin(u*Math.PI*(b?34:16)+t*.001);if(mode==='psk')y=Math.sin(u*20*Math.PI+(b?0:Math.PI)+t*.001)}let yy=h/2-y*h*.37;if(px===0)x.moveTo(px,yy);else x.lineTo(px,yy)}x.stroke()}
+const waves=[...document.querySelectorAll('.wave')];function waveLoop(t){if(!paused)waves.forEach(c=>{if(c.closest('.slide').classList.contains('active'))drawWave(c,t)});requestAnimationFrame(waveLoop)}requestAnimationFrame(waveLoop);
+
+let qamTimer=null,qamStep=0;const qamModes=[{n:4,name:'QPSK',bits:'2 bit/simbol',text:'4 titik konstelasi. Jarak titik relatif jauh sehingga lebih toleran terhadap noise.'},{n:16,name:'16‑QAM',bits:'4 bit/simbol',text:'16 titik. Efisiensi naik, tetapi titik mulai lebih rapat.'},{n:64,name:'64‑QAM',bits:'6 bit/simbol',text:'64 titik. Throughput meningkat dengan kebutuhan SNR yang lebih baik.'},{n:256,name:'256‑QAM',bits:'8 bit/simbol',text:'256 titik. Sangat efisien, tetapi paling sensitif terhadap noise.'}];
+function positions(n){let side=Math.sqrt(n),a=[];for(let y=0;y<side;y++)for(let x=0;x<side;x++)a.push([14+72*(x/(side-1||1)),14+72*(y/(side-1||1))]);return a}
+function renderQam(m){const box=document.getElementById('constellation');if(!box)return;let dots=[...box.querySelectorAll('.dot')],pos=positions(m.n);while(dots.length<m.n){let d=document.createElement('i');d.className='dot';box.appendChild(d);dots.push(d)}dots.forEach((d,i)=>{if(i<m.n){d.style.opacity=1;d.style.left=pos[i][0]+'%';d.style.top=pos[i][1]+'%'}else d.style.opacity=0});document.getElementById('qamMode').textContent=m.name;document.getElementById('qamBits').textContent=m.bits;document.getElementById('qamText').textContent=m.text}
+function initQam(){if(qamTimer)return;renderQam(qamModes[0]);qamTimer=setInterval(()=>{if(idx!==7)return;qamStep=(qamStep+1)%qamModes.length;renderQam(qamModes[qamStep])},2200)}
+
+function drawOfdm(t){const c=document.getElementById('ofdmCanvas');if(!c||idx!==18||paused)return;let [x,w,h]=fitCanvas(c);x.clearRect(0,0,w,h);let mid=h*.55;for(let k=0;k<8;k++){let center=(k+1)*w/9,amp=h*.18,xscale=38;x.strokeStyle=`hsla(${185+k*9},90%,70%,.72)`;x.lineWidth=1.5;x.beginPath();for(let px=0;px<w;px++){let z=(px-center)/xscale;let sinc=Math.abs(z)<.001?1:Math.sin(Math.PI*z)/(Math.PI*z);let yy=mid-amp*sinc*Math.cos(t*.001+k*.25);if(px===0)x.moveTo(px,yy);else x.lineTo(px,yy)}x.stroke()}x.strokeStyle='rgba(255,255,255,.13)';x.beginPath();x.moveTo(0,mid);x.lineTo(w,mid);x.stroke()}
+function anim(t){drawOfdm(t);requestAnimationFrame(anim)}requestAnimationFrame(anim);
+
+const qb=document.getElementById('quizBtn'),qa=document.getElementById('quizAnswer');qb.onclick=()=>{qa.classList.toggle('show');qb.textContent=qa.classList.contains('show')?'Sembunyikan jawaban':'Tampilkan jawaban'};
+function tick(){let s=Math.floor((Date.now()-t0)/1000),m=Math.floor(s/60);document.getElementById('timer').textContent=`${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;requestAnimationFrame(tick)}tick();window.addEventListener('resize',()=>{});show(idx);
+</script>
+</body></html>
